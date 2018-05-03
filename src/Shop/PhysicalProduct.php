@@ -2,6 +2,7 @@
 
 namespace App\Shop;
 
+use App\Shop\Visitor\ProductVisitor;
 use Money\Money;
 
 class PhysicalProduct
@@ -30,5 +31,10 @@ class PhysicalProduct
     public function getPrice(): Money
     {
         return $this->price;
+    }
+
+    public function accept(ProductVisitor $visitor): void
+    {
+        $visitor->visitProduct($this);
     }
 }

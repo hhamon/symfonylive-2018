@@ -2,6 +2,7 @@
 
 namespace App\Shop;
 
+use App\Shop\Visitor\ProductVisitor;
 use Money\Currency;
 use Money\Money;
 
@@ -27,6 +28,11 @@ class ProductPackage extends PhysicalProduct
         );
     }
 
+    public function getNumberOfProducts(): int
+    {
+        return count($this->products);
+    }
+
     private function getTotalPrice(): Money
     {
         $price = new Money(0, new Currency('EUR'));
@@ -45,5 +51,14 @@ class ProductPackage extends PhysicalProduct
         }
 
         return $weight;
+    }
+
+    public function accept(ProductVisitor $visitor): void
+    {
+        $visitor->visitPackage($this);
+
+        foreach ($this->products as $product) {
+            $product->accept($visitor);
+        }
     }
 }
